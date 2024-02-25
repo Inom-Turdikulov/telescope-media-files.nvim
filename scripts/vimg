@@ -13,8 +13,14 @@ function render_at_size {
   max_height="${2}"
   img_path="${3}"
 
+  # if image path is svg use imagemagic convert
+  # TODO: maybe not actual anymore (chafa support svg by default, but not working in my ENV)
   # animation is turned off as it does werid things with the terminal output
-  chafa --animate=off --center=on --clear --size "${max_width}x${max_height}" "${img_path}"
+  if [[ $img_path =~ \.svg$ ]]; then
+    convert "${img_path}"  PNG32:- | chafa --animate=off --center=on --clear --size "${max_width}x${max_height}"
+  else
+    chafa --animate=off --center=on --clear --size "${max_width}x${max_height}" "${img_path}"
+  fi
 }
 
 function draw_preview {
